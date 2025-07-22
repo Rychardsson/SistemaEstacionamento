@@ -6,30 +6,48 @@ Console.OutputEncoding = System.Text.Encoding.UTF8;
 decimal precoInicial = 0;
 decimal precoPorHora = 0;
 
-Console.WriteLine("Seja bem vindo ao sistema de estacionamento!\n" +
-                  "Digite o preço inicial:");
-precoInicial = Convert.ToDecimal(Console.ReadLine());
+Console.WriteLine("Seja bem-vindo ao sistema de estacionamento!");
 
-Console.WriteLine("Agora digite o preço por hora:");
-precoPorHora = Convert.ToDecimal(Console.ReadLine());
+// Entrada do preço inicial
+while (true)
+{
+    Console.Write("Digite o preço inicial: ");
+    if (decimal.TryParse(Console.ReadLine(), out precoInicial) && precoInicial >= 0)
+        break;
+    Console.WriteLine("Valor inválido. Digite um número válido maior ou igual a zero.");
+}
 
-// Instancia a classe Estacionamento, já com os valores obtidos anteriormente
+// Entrada do preço por hora
+while (true)
+{
+    Console.Write("Digite o preço por hora: ");
+    if (decimal.TryParse(Console.ReadLine(), out precoPorHora) && precoPorHora >= 0)
+        break;
+    Console.WriteLine("Valor inválido. Digite um número válido maior ou igual a zero.");
+}
+
+// Instancia a classe Estacionamento
 Estacionamento es = new Estacionamento(precoInicial, precoPorHora);
 
 string opcao = string.Empty;
 bool exibirMenu = true;
 
-// Realiza o loop do menu
 while (exibirMenu)
 {
     Console.Clear();
+    Console.WriteLine("===================================");
+    Console.WriteLine("  SISTEMA DE ESTACIONAMENTO");
+    Console.WriteLine("===================================");
     Console.WriteLine("Digite a sua opção:");
     Console.WriteLine("1 - Cadastrar veículo");
     Console.WriteLine("2 - Remover veículo");
     Console.WriteLine("3 - Listar veículos");
     Console.WriteLine("4 - Encerrar");
+    Console.Write("Opção: ");
 
-    switch (Console.ReadLine())
+    opcao = Console.ReadLine();
+
+    switch (opcao)
     {
         case "1":
             es.AdicionarVeiculo();
@@ -44,16 +62,29 @@ while (exibirMenu)
             break;
 
         case "4":
-            exibirMenu = false;
+            Console.Write("Tem certeza que deseja encerrar? (S/N): ");
+            string confirmacao = Console.ReadLine()?.Trim().ToUpper();
+            if (confirmacao == "S")
+            {
+                exibirMenu = false;
+                Console.WriteLine("Encerrando o sistema...");
+            }
+            else
+            {
+                Console.WriteLine("Operação cancelada.");
+            }
             break;
 
         default:
-            Console.WriteLine("Opção inválida");
+            Console.WriteLine("Opção inválida. Por favor, digite uma opção de 1 a 4.");
             break;
     }
 
-    Console.WriteLine("Pressione uma tecla para continuar");
-    Console.ReadLine();
+    if (exibirMenu)
+    {
+        Console.WriteLine("\nPressione Enter para continuar...");
+        Console.ReadLine();
+    }
 }
 
-Console.WriteLine("O programa se encerrou");
+Console.WriteLine("O programa foi encerrado. Obrigado!");
